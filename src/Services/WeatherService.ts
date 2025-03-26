@@ -1,19 +1,13 @@
 import axios from "axios";
 
-// Definir tipos para os dados de previsão e clima
-interface ForecastItem {
-  dt_txt: string;
-  main: {
-    temp: number;
-  };
-  weather: Array<{
-    icon: string;
-  }>;
-}
-
 interface WeatherData {
   city: string;
   temperature: number;
+  country: string;
+  tempMin: number;
+  tempMax: number;
+  windSpeed: number;
+  humidity: number;
   description: string;
   icon: string;
   forecast: Array<{
@@ -28,7 +22,6 @@ const BASE_URL = "https://api.openweathermap.org/data/2.5";
 
 export const fetchWeatherData = async (city: string): Promise<WeatherData | null> => {
   try {
-    // Requisição para o clima atual
     const response = await axios.get(`${BASE_URL}/weather`, {
       params: {
         q: city,
@@ -38,7 +31,6 @@ export const fetchWeatherData = async (city: string): Promise<WeatherData | null
       },
     });
 
-    // Requisição para a previsão do tempo (5 dias)
     const forecastResponse = await axios.get(`${BASE_URL}/forecast`, {
       params: {
         q: city,
@@ -48,28 +40,24 @@ export const fetchWeatherData = async (city: string): Promise<WeatherData | null
       },
     });
 
-    // Se os dados da previsão não existirem, evitamos retornar um objeto vazio
-    if (!forecastResponse.data.list || forecastResponse.data.list.length === 0) {
-      console.warn("Nenhuma previsão disponível para esta cidade.");
-      return null;
-    }
-
-    // Filtramos apenas as previsões do meio-dia (12:00:00) e pegamos os próximos 5 dias
-    const forecastData = forecastResponse.data.list
-      .filter((item: ForecastItem) => item.dt_txt.includes("12:00:00"))
-      .slice(0, 5)
-      .map((item: ForecastItem) => ({
-        date: item.dt_txt.split(" ")[0], // Formato YYYY-MM-DD
-        temp: Math.round(item.main.temp), // Arredondamos a temperatura
-        icon: item.weather[0].icon,
-      }));
-
     return {
       city: response.data.name,
+      country: response.data.sys.country, // Pegando a sigla do país corretamente
       temperature: Math.round(response.data.main.temp),
+      tempMin: Math.round(response.data.main.temp_min),
+      tempMax: Math.round(response.data.main.temp_max),
+      windSpeed: Math.round(response.data.wind.speed * 3.6), // Convertendo de m/s para km/h
+      humidity: response.data.main.humidity,
       description: response.data.weather[0].description,
       icon: response.data.weather[0].icon,
-      forecast: forecastData,
+      forecast: forecastResponse.data.list
+        .filter((item: { dt_txt: string }) => item.dt_txt.includes("12:00:00"))
+        .slice(0, 5)
+        .map((item: { dt_txt: string; main: { temp: number }; weather: { icon: string }[] }) => ({
+          date: item.dt_txt.split(" ")[0],
+          temp: Math.round(item.main.temp),
+          icon: item.weather[0].icon,
+        })),
     };
   } catch (error) {
     console.error("Erro ao buscar dados do clima:", error);

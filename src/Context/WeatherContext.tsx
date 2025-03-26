@@ -3,7 +3,12 @@ import { fetchWeatherData } from "../Services/WeatherService";
 
 interface WeatherData {
   city: string;
+  country: string;
   temperature: number;
+  tempMin: number;
+  tempMax: number;
+  windSpeed: number;
+  humidity: number;
   description: string;
   icon: string;
   forecast: { date: string; temp: number; icon: string }[];
@@ -29,7 +34,7 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
         setWeather(null);
         return;
       }
-      setWeather(data);
+      setWeather(data); // Agora passa um objeto completo com todos os atributos
     } catch (error) {
       console.error("Erro ao buscar clima:", error);
       setWeather(null);
