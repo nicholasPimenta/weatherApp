@@ -16,15 +16,15 @@ export const SearchBar = () => {
   };
 
   return (
-    <div className="flex gap-2 p-4">
+    <div className="flex justify-center gap-2 p-4">
       <input
         type="text"
         placeholder="Digite a cidade..."
-        className="p-2 border rounded w-full"
+        className="p-2 border border-purple-600 rounded outline-0 w-50 md:w-75 lg:w-100"
         value={city}
         onChange={(e) => setCity(e.target.value)}
       />
-      <button onClick={handleSearch} className="bg-blue-500 text-white p-2 rounded">
+      <button onClick={handleSearch} className="bg-purple-600 hover:bg-purple-800 transition text-white p-2 rounded border-none cursor-pointer">
         Buscar
       </button>
     </div>

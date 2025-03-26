@@ -11,7 +11,7 @@ export const Forecast = () => {
     year: "numeric",
   });
 
-  // Filtra apenas os dias que são diferentes de hoje e pega os próximos 5 dias
+  // Filtra apenas os dias que são diferentes de hoje e pega os próximos 4 dias
   const filteredForecast = weatherContext.weather.forecast
     .filter((day) => {
       const forecastDate = new Date(day.date).toLocaleDateString("pt-BR", {
@@ -21,26 +21,26 @@ export const Forecast = () => {
       });
       return forecastDate !== today;
     })
-    .slice(0, 5); // Pega apenas os próximos 5 dias
+    .slice(0, 5); // Pega apenas os próximos 4 dias
 
   return (
     <div className="mt-4">
       <h3 className="text-xl font-semibold text-center">
         Previsão para os próximos dias
       </h3>
-      <div className="flex justify-around mt-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-2">
         {filteredForecast.length > 0 ? (
           filteredForecast.map((day, index) => (
             <div
               key={index}
-              className="text-center bg-blue-500 p-2 rounded-lg shadow-md"
+              className="text-center bg-blue-400 p-2 rounded-lg shadow-md"
             >
               <p className="text-gray-700 font-semibold">
                 {new Date(day.date).toLocaleDateString("pt-BR", {
                   weekday: "long",
                   day: "2-digit",
                   month: "2-digit",
-                }).replace(/^./, (match) => match.toUpperCase())} {/* Torna a primeira letra maiúscula */}
+                }).replace(/^./, (match) => match.toUpperCase())}
               </p>
               <img
                 src={`https://openweathermap.org/img/wn/${day.icon}@2x.png`}

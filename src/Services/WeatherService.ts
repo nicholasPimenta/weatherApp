@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const BASE_URL = "https://api.openweathermap.org/data/2.5";
-const API_KEY = "INSERT_KEY_HERE"; // Substitua pela sua chave da API
+const API_KEY = "INSERT_KEY_HERE
+"; // Substitua pela sua chave da API
 
-// Definindo a interface para o item de previsão (Forecast)
 interface Forecast {
   date: string;
   tempMin: number;
@@ -11,7 +11,6 @@ interface Forecast {
   icon: string;
 }
 
-// Definindo a interface para os dados climáticos principais (WeatherData)
 interface WeatherData {
   city: string;
   temperature: number;
@@ -22,7 +21,7 @@ interface WeatherData {
   humidity: number;
   description: string;
   icon: string;
-  forecast: Forecast[]; // Usando o tipo Forecast para previsão
+  forecast: Forecast[];
 }
 
 export const fetchWeatherData = async (city: string): Promise<WeatherData | null> => {
@@ -37,7 +36,7 @@ export const fetchWeatherData = async (city: string): Promise<WeatherData | null
       },
     });
 
-    // Requisição para a previsão do tempo (5 dias)
+    // Requisição para a previsão do tempo (4 dias)
     const forecastResponse = await axios.get(`${BASE_URL}/forecast`, {
       params: {
         q: city,
@@ -47,11 +46,11 @@ export const fetchWeatherData = async (city: string): Promise<WeatherData | null
       },
     });
 
-    // Organizando os dados de previsão (5 dias)
+    // Organizando os dados de previsão (4 dias)
     const dailyForecast: { [key: string]: { min: number; max: number; icon: string } } = {};
 
     forecastResponse.data.list.forEach((item: { dt_txt: string; main: { temp: number }; weather: [{ icon: string }] }) => {
-      const date = item.dt_txt.split(" ")[0]; // Pegamos apenas a data YYYY-MM-DD
+      const date = item.dt_txt.split(" ")[0];
 
       if (!dailyForecast[date]) {
         dailyForecast[date] = { min: item.main.temp, max: item.main.temp, icon: item.weather[0].icon };
@@ -61,7 +60,6 @@ export const fetchWeatherData = async (city: string): Promise<WeatherData | null
       }
     });
 
-    // Convertemos o objeto para um array e pegamos os próximos 4 dias (ignorando hoje)
     const today = new Date().toISOString().split("T")[0];
 
     const forecast: Forecast[] = Object.entries(dailyForecast)
@@ -85,7 +83,7 @@ export const fetchWeatherData = async (city: string): Promise<WeatherData | null
       tempMax: response.data.main.temp_max,
       windSpeed: response.data.wind.speed,
       humidity: response.data.main.humidity,
-      forecast: forecast, // Adiciona a previsão corrigida no retorno
+      forecast: forecast,
     };
   } catch (error) {
     console.error("Erro ao buscar dados do clima:", error);
