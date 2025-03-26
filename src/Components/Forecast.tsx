@@ -35,12 +35,14 @@ export const Forecast = () => {
               key={index}
               className="text-center bg-blue-400 p-2 rounded-lg shadow-md"
             >
-              <p className="text-gray-700 font-semibold">
-                {new Date(day.date).toLocaleDateString("pt-BR", {
-                  weekday: "long",
-                  day: "2-digit",
-                  month: "2-digit",
-                }).replace(/^./, (match) => match.toUpperCase())}
+              <p className="text-purple-900 font-semibold">
+                {new Date(day.date)
+                  .toLocaleDateString("pt-BR", {
+                    weekday: "long",
+                    day: "2-digit",
+                    month: "2-digit",
+                  })
+                  .replace(/^./, (match) => match.toUpperCase())}
               </p>
               <img
                 src={`https://openweathermap.org/img/wn/${day.icon}@2x.png`}
@@ -48,12 +50,8 @@ export const Forecast = () => {
                 className="mx-auto"
               />
               <div className="flex flex-col justify-center">
-                <p className="text-sm text-gray-200">
-                  Máx: {day.tempMax}°C
-                </p>
-                <p className="text-sm text-gray-200">
-                  Mín: {day.tempMin}°C
-                </p>
+                <p className="text-sm text-gray-200">Máx: {day.tempMax}°C</p>
+                <p className="text-sm text-gray-200">Mín: {day.tempMin}°C</p>
               </div>
             </div>
           ))

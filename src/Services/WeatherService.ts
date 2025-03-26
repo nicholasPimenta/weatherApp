@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const BASE_URL = "https://api.openweathermap.org/data/2.5";
-const API_KEY = "INSERT_KEY_HERE
-"; // Substitua pela sua chave da API
+const API_KEY = "8a3bf3766c1773d495c59b01354ddf43"; // Substitua pela sua chave da API
 
 interface Forecast {
   date: string;
@@ -47,18 +46,36 @@ export const fetchWeatherData = async (city: string): Promise<WeatherData | null
     });
 
     // Organizando os dados de previsão (4 dias)
-    const dailyForecast: { [key: string]: { min: number; max: number; icon: string } } = {};
+    const dailyForecast: {
+      [key: string]: { min: number; max: number; icon: string };
+    } = {};
 
-    forecastResponse.data.list.forEach((item: { dt_txt: string; main: { temp: number }; weather: [{ icon: string }] }) => {
-      const date = item.dt_txt.split(" ")[0];
+    forecastResponse.data.list.forEach(
+      (item: {
+        dt_txt: string;
+        main: { temp: number };
+        weather: [{ icon: string }];
+      }) => {
+        const date = item.dt_txt.split(" ")[0];
 
-      if (!dailyForecast[date]) {
-        dailyForecast[date] = { min: item.main.temp, max: item.main.temp, icon: item.weather[0].icon };
-      } else {
-        dailyForecast[date].min = Math.min(dailyForecast[date].min, item.main.temp);
-        dailyForecast[date].max = Math.max(dailyForecast[date].max, item.main.temp);
+        if (!dailyForecast[date]) {
+          dailyForecast[date] = {
+            min: item.main.temp,
+            max: item.main.temp,
+            icon: item.weather[0].icon,
+          };
+        } else {
+          dailyForecast[date].min = Math.min(
+            dailyForecast[date].min,
+            item.main.temp
+          );
+          dailyForecast[date].max = Math.max(
+            dailyForecast[date].max,
+            item.main.temp
+          );
+        }
       }
-    });
+    );
 
     const today = new Date().toISOString().split("T")[0];
 

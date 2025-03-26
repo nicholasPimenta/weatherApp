@@ -1,32 +1,35 @@
-import { useState, useContext } from "react";
-import { WeatherContext } from "../Context/WeatherContext";
+import { useState } from "react";
 
-export const SearchBar = () => {
+interface SearchBarProps {
+  onSearch: (city: string) => void; // Função que será chamada quando o usuário buscar uma cidade
+}
+
+export const SearchBar = ({ onSearch }: SearchBarProps) => {
   const [city, setCity] = useState("");
-  const weatherContext = useContext(WeatherContext);
 
-  if (!weatherContext) return null;
-  const { fetchWeather } = weatherContext;
-
-  const handleSearch = () => {
-    if (city.trim() !== "") {
-      fetchWeather(city);
-      setCity("");
-    }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearch(city); // Passa o nome da cidade para a função onSearch do Home.tsx
+    setCity(""); // Limpa o campo de pesquisa após o envio
   };
 
   return (
-    <div className="flex justify-center gap-2 p-4">
-      <input
-        type="text"
-        placeholder="Digite a cidade..."
-        className="p-2 border border-purple-600 rounded outline-0 w-50 md:w-75 lg:w-100"
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-      />
-      <button onClick={handleSearch} className="bg-purple-600 hover:bg-purple-800 transition text-white p-2 rounded border-none cursor-pointer">
-        Buscar
-      </button>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <div className="flex justify-center gap-2 p-4">
+        <input
+          type="text"
+          placeholder="Digite a cidade..."
+          className="p-2 border border-purple-600 rounded outline-0 w-50 md:w-75 lg:w-100"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+        />
+        <button
+          type="submit"
+          className="bg-purple-600 hover:bg-purple-800 transition text-white p-2 rounded border-none cursor-pointer"
+        >
+          Buscar
+        </button>
+      </div>
+    </form>
   );
 };

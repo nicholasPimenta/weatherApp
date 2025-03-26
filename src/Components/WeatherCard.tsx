@@ -1,5 +1,7 @@
 import { useContext } from "react";
 import { WeatherContext } from "../Context/WeatherContext";
+import { faDroplet, faTemperatureHigh, faTemperatureLow, faWind } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const WeatherCard = () => {
   const weatherContext = useContext(WeatherContext);
@@ -7,14 +9,14 @@ export const WeatherCard = () => {
 
   const {
     city,
+    icon,
     country,
-    temperature,
     tempMin,
     tempMax,
-    windSpeed,
     humidity,
+    windSpeed,
+    temperature,
     description,
-    icon,
   } = weatherContext.weather;
 
   return (
@@ -30,11 +32,32 @@ export const WeatherCard = () => {
       <p className="text-xl font-semibold">{Math.round(temperature)}°C</p>
       <p className="capitalize text-gray-300">{description}</p>
       <div className="mt-4 space-y-1">
-        <p className="text-sm">
-          🌡️ Mín: {Math.round(tempMin)}°C | Máx: {Math.round(tempMax)}°C
-        </p>
-        <p className="text-sm">💨 Vento: {Math.round(windSpeed)} km/h</p>
-        <p className="text-sm">💧 Umidade: {humidity}%</p>
+        <div className="flex flex-row gap-4">
+          <div className="flex flex-row items-center gap-1">
+            <FontAwesomeIcon className="text-xl text-red-800" icon={faTemperatureHigh} />
+            <p className="text-sm">
+              Máx: {Math.round(tempMax)}°C
+            </p>
+          </div>
+          <div className="flex flex-row items-center gap-1">
+            <FontAwesomeIcon className="text-xl text-purple-600" icon={faTemperatureLow} />
+            <p className="text-sm">
+              Mín: {Math.round(tempMin)}°C
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-row gap-1 items-center justify-center mt-2">
+          <FontAwesomeIcon className="text-xl text-green-500" icon={faWind} />
+          <p className="text-sm">
+            Vento: {Math.round(windSpeed)} km/h
+          </p>
+        </div>
+        <div className="flex flex-row gap-1 items-center justify-center mt-2">
+          <FontAwesomeIcon className="text-xl text-indigo-900" icon={faDroplet} />
+          <p className="text-sm">
+            Umidade: {humidity}%
+          </p>
+        </div>
       </div>
     </div>
   );
