@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const BASE_URL = "https://api.openweathermap.org/data/2.5";
-const API_KEY = "8a3bf3766c1773d495c59b01354ddf43"; // Substitua pela sua chave da API
+const API_KEY = "INSERT_KEY_HERE"; // Substitua pela sua chave da API
 
 interface Forecast {
   date: string;
