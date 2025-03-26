@@ -1,4 +1,4 @@
-import { WeatherProvider } from "./Context/WeatherContext";
+import { WeatherProvider } from "./Context/WeatherProvider";
 import { Home } from "./Pages/Home";
 
 const App = () => {
