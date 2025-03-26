@@ -33,9 +33,9 @@ export const Forecast = () => {
           filteredForecast.map((day, index) => (
             <div
               key={index}
-              className="text-center bg-blue-400 p-2 rounded-lg shadow-md"
+              className="text-center bg-blue-400 p-2 rounded-lg shadow-md flex flex-col justify-center items-center"
             >
-              <p className="text-purple-900 font-semibold">
+              <p className="text-purple-900 text-sm lg:text-lg font-semibold">
                 {new Date(day.date)
                   .toLocaleDateString("pt-BR", {
                     weekday: "long",
@@ -44,16 +44,16 @@ export const Forecast = () => {
                   })
                   .replace(/^./, (match) => match.toUpperCase())}
               </p>
-              <img
-                src={`https://openweathermap.org/img/wn/${day.icon}@2x.png`}
-                alt="Ícone do clima"
-                className="mx-auto"
-              />
-              <div className="flex flex-col justify-center">
-                <p className="text-sm text-gray-200">Máx: {day.tempMax}°C</p>
-                <p className="text-sm text-gray-200">Mín: {day.tempMin}°C</p>
+                <img
+                  src={`https://openweathermap.org/img/wn/${day.icon}@2x.png`}
+                  alt="Ícone do clima"
+                  className="mx-auto mt-auto"
+                />
+                <div className="flex flex-col mt-auto">
+                  <p className="text-sm text-gray-200">Máx: {day.tempMax}°C</p>
+                  <p className="text-sm text-gray-200">Mín: {day.tempMin}°C</p>
+                </div>
               </div>
-            </div>
           ))
         ) : (
           <p className="text-center text-gray-500">

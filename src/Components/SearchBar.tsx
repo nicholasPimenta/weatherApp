@@ -15,7 +15,7 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="flex justify-center gap-2 p-4">
+      <div className="flex justify-center gap-2 pb-4">
         <input
           type="text"
           placeholder="Digite a cidade..."
