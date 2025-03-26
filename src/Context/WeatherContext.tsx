@@ -11,7 +11,7 @@ interface WeatherData {
   humidity: number;
   description: string;
   icon: string;
-  forecast: { date: string; temp: number; icon: string }[];
+  forecast: { date: string; icon: string; tempMin: number; tempMax: number; }[];
 }
 
 interface WeatherContextType {

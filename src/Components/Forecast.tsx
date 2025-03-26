@@ -23,14 +23,21 @@ export const Forecast = () => {
                   weekday: "long",
                   day: "2-digit",
                   month: "2-digit",
-                })}
+                }).replace(/^./, (match) => match.toUpperCase())} {/* Torna a primeira letra maiúscula */}
               </p>
               <img
                 src={`https://openweathermap.org/img/wn/${day.icon}@2x.png`}
                 alt="Ícone do clima"
                 className="mx-auto"
               />
-              <p className="text-xl font-bold">{day.temp}°C</p>
+              <div className="flex flex-col justify-center">
+                <p className="text-sm text-gray-200">
+                  Máx: {day.tempMax}°C
+                </p>
+                <p className="text-sm text-gray-200">
+                  Mín: {day.tempMin}°C
+                </p>
+              </div>
             </div>
           ))
         ) : (
