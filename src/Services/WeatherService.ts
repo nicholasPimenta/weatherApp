@@ -48,14 +48,30 @@ export const fetchWeatherData = async (city: string): Promise<WeatherData | null
     });
 
     // Organizando os dados de previsão (5 dias)
-    const forecast: Forecast[] = forecastResponse.data.list
-      .filter((item: { dt_txt: string }) => item.dt_txt.includes("12:00:00")) // Pegamos registros de meio-dia
-      .slice(0, 5) // Pegamos os próximos 5 dias
-      .map((item: { dt_txt: string; main: { temp: number; temp_min: number; temp_max: number }; weather: [{ icon: string }] }) => ({
-        date: item.dt_txt.split(" ")[0], // Extraímos a data no formato YYYY-MM-DD
-        tempMin: Math.round(item.main.temp_min), // Temperatura mínima
-        tempMax: Math.round(item.main.temp_max), // Temperatura máxima
-        icon: item.weather[0].icon, // Ícone do clima
+    const dailyForecast: { [key: string]: { min: number; max: number; icon: string } } = {};
+
+    forecastResponse.data.list.forEach((item: { dt_txt: string; main: { temp: number }; weather: [{ icon: string }] }) => {
+      const date = item.dt_txt.split(" ")[0]; // Pegamos apenas a data YYYY-MM-DD
+
+      if (!dailyForecast[date]) {
+        dailyForecast[date] = { min: item.main.temp, max: item.main.temp, icon: item.weather[0].icon };
+      } else {
+        dailyForecast[date].min = Math.min(dailyForecast[date].min, item.main.temp);
+        dailyForecast[date].max = Math.max(dailyForecast[date].max, item.main.temp);
+      }
+    });
+
+    // Convertemos o objeto para um array e pegamos os próximos 4 dias (ignorando hoje)
+    const today = new Date().toISOString().split("T")[0];
+
+    const forecast: Forecast[] = Object.entries(dailyForecast)
+      .filter(([date]) => date !== today) // Remove o dia de hoje
+      .slice(0, 5) // Pegamos os próximos 4 dias
+      .map(([date, data]) => ({
+        date,
+        tempMin: Math.round(data.min),
+        tempMax: Math.round(data.max),
+        icon: data.icon,
       }));
 
     // Retorna os dados do clima com a previsão
@@ -69,7 +85,7 @@ export const fetchWeatherData = async (city: string): Promise<WeatherData | null
       tempMax: response.data.main.temp_max,
       windSpeed: response.data.wind.speed,
       humidity: response.data.main.humidity,
-      forecast: forecast, // Adiciona a previsão no retorno
+      forecast: forecast, // Adiciona a previsão corrigida no retorno
     };
   } catch (error) {
     console.error("Erro ao buscar dados do clima:", error);

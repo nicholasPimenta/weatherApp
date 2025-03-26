@@ -5,15 +5,32 @@ export const Forecast = () => {
   const weatherContext = useContext(WeatherContext);
   if (!weatherContext || !weatherContext.weather) return null;
 
+  const today = new Date().toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+
+  // Filtra apenas os dias que são diferentes de hoje e pega os próximos 5 dias
+  const filteredForecast = weatherContext.weather.forecast
+    .filter((day) => {
+      const forecastDate = new Date(day.date).toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+      return forecastDate !== today;
+    })
+    .slice(0, 5); // Pega apenas os próximos 5 dias
+
   return (
     <div className="mt-4">
       <h3 className="text-xl font-semibold text-center">
-        Previsão para os próximos 5 dias
+        Previsão para os próximos dias
       </h3>
       <div className="flex justify-around mt-2">
-        {weatherContext.weather.forecast &&
-        weatherContext.weather.forecast.length > 0 ? (
-          weatherContext.weather.forecast.map((day, index) => (
+        {filteredForecast.length > 0 ? (
+          filteredForecast.map((day, index) => (
             <div
               key={index}
               className="text-center bg-blue-500 p-2 rounded-lg shadow-md"
